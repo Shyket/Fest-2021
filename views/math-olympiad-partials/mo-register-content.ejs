@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <div class="right_col" role="main">
+      <div class="">
+        <div class="page-title">
+          <div class="title_left">
+            <h3>Math Olympiad 2021</h3>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+          <div class="col-md-12 col-sm-12">
+            <div class="x_panel">
+              <div class="x_title">
+                <h2>Participant Registration</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                  <li>
+                    <a class="collapse-link"
+                      ><i class="fa fa-chevron-up"></i
+                    ></a>
+                  </li>       
+                </ul>
+                <div class="clearfix"></div>
+              </div>
+              <div class="x_content">
+                <br />
+
+                <%if(message.length>0){if(message=="participant registered successfully"){%>
+                <div class="alert alert-success"><%=message%></div>
+                <%}else{%>
+                <div class="alert alert-danger"><%=message%></div>
+                <%}%> <%}%>
+                <form
+                  id="demo-form2"
+                  data-parsley-validate
+                  class="form-horizontal form-label-left"
+                  action="/mo/register" method="POST"
+                >
+                  <div class="item form-group">
+                    <label
+                      class="col-form-label col-md-3 col-sm-3 label-align"
+                      for="name"
+                      >Name <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6">
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        required="required"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="item form-group">
+                    <label
+                      class="col-form-label col-md-3 col-sm-3 label-align"
+                      for="contact"
+                      >Contact <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6">
+                      <input
+                        type="number"
+                        id="contact"
+                        name="contact"
+                        required="required"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="item form-group">
+                    <label
+                      class="col-form-label col-md-3 col-sm-3 label-align"
+                      for="email"
+                      >Email
+                    </label>
+                    <div class="col-md-6 col-sm-6">
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="item form-group row">
+                    <label class="col-form-label col-md-3 col-sm-3 label-align"
+                      >Category</label
+                    >
+                    <div class="col-md-6 col-sm-6">
+                      <select class="form-control" id="category"
+                        name="category">
+                        <option>School</option>
+                        <option>College</option>
+                        <option>University</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="item form-group">
+                    <label
+                      for="middle-name"
+                      class="col-form-label col-md-3 col-sm-3 label-align"
+                      >Institute <span class="required">*</span></label
+                    >
+                    <div class="col-md-6 col-sm-6">
+                      <input
+                        id="institute"
+                        name="institute"
+                        class="form-control"
+                        type="text"
+                        required="required"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="item form-group">
+                    <label class="col-form-label col-md-3 col-sm-3 label-align"
+                      >T-Shirt <span class="required">*</span>
+                    </label>
+                    <div class="col-md-6 col-sm-6">
+                      <select class="form-control" id="tshirt"
+                        name="tshirt">
+                        <option>Small</option>
+                        <option>Medium</option>
+                        <option>Large</option>
+                        <option>XL</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="ln_solid"></div>
+                  <div class="item form-group">
+                    <div class="col-md-6 col-sm-6 offset-md-3">
+                      <button class="btn btn-primary" type="reset">
+                        Reset
+                      </button>
+                      <button type="submit" class="btn btn-success">
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
