@@ -8,6 +8,10 @@ const ParticipantSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  category: {
+    type: String,
+    required: true,
+  },
   contact: {
     type: Number,
     required: true,
@@ -23,6 +27,12 @@ const ParticipantSchema = new mongoose.Schema({
   },
   payment_status: {
     type: Boolean,
+  },
+  paid: {
+    type: Number,
+  },
+  due: {
+    type: Number,
   },
   date: {
     type: Date,

@@ -26,11 +26,17 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
+                <br/>
+                <%if(error.length>0){%>
+                  <%if(error=="Data deleted successfully"){ %>
+                    <div class="alert alert-success"><%=error%></div>
+                    <%}else{%>
+                <div class="alert alert-danger"><%=error%></div>
+                <%}}%>
                 <div class="row">
                   <div class="col-sm-12">
                     <div class="card-box table-responsive">
                       
-
                       <table
                         id="datatable-responsive"
                         class="
@@ -48,23 +54,54 @@
                             <th>Email</th>
                             <th>Category</th>
                             <th>Institute</th>
-                            <th>Payment</th>
+                            <th>Selected</th>
+                            <th>Payment <br/>status</th>
                             <th>Paid</th>
+                            <th>Due</th>
                             <th>T-Shirt</th>            
+                            <th>Select</th>            
+                            <th>Payment <br/>Done</th>            
+                            <th>Edit</th>           
+                            <th>Delete</th>           
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>Tiger</td>
-                            <td>Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                            <td>5421</td>
-                            <td>t.nixon@datatables.net</td>
-                          </tr>                        
+                          <% if(participantList.length > 0){%>
+                            <%participantList.forEach((participant) => {%>
+                              <tr>
+                            <td><%= participant.name %></td>
+                            <td><%= participant.contact %></td>
+                            <td><%= participant.email %></td>
+                            <td><%= participant.category %></td>
+                            <td><%= participant.institute %></td>
+                            <td><%= participant.selected %></td>
+                            <td><% if(participant.payment_status){ %>
+                              <p style="color: Green">Done</p>
+                              <% }else{ %>
+                              <p style="color: Red">Unpaid</p>
+                              <%}%>
+                            </td>
+                            <td><%= participant.paid %></td>
+                            <td><%= participant.due %></td>
+                            <td><%= participant.t_shirt %></td>
+                            <td></td>
+                            <td><% const paymentURL="/mo/payment/"+participant._id %>
+                              <a href="<%=paymentURL%>"> 
+                                <i class="fa fa-money"></i>
+                                <span class="fa fa-chevron"></span>
+                              </a>
+                            </td>
+                            <td>participant.tshirt</td>
+                            <td>
+                              <% const deleteURL="/mo/delete/"+participant._id %>
+                              <a href="<%=deleteURL%>"> 
+                                <i class="fa fa-trash"></i>
+                                <span class="fa fa-chevron"></span>
+                              </a>
+                            </td>
+                          </tr> 
+                        <% })} %>
+                                                 
                         </tbody>
                       </table>
                     </div>

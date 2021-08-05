@@ -7,22 +7,37 @@ const getRegister = (req, res) => {
 };
 
 const getParticipantList = (req, res) => {
-  res.render("math-olympiad/participant-list.ejs", {
-    error: req.flash("error"),
-  });
+  let participantList = [];
+  let error = "";
+  Participant.find()
+    .then((data) => {
+      participantList = data;
+      res.render("math-olympiad/participant-list.ejs", {
+        error: req.flash("error"),
+        participantList: participantList,
+      });
+    })
+    .catch(() => {
+      error = "Error!!";
+      res.render("math-olympiad/participant-list.ejs", {
+        error: req.flash("error", error),
+        participantList: participantList,
+      });
+    });
 };
 
 const postRegister = (req, res) => {
   const { name, category, institute, contact, email, tshirt } = req.body;
-  let fee = 0;
+  let due = 0;
   let payment_status = false;
+  let paid = 0;
   let selected = false;
   if (category === "School") {
-    fee = 300;
+    due = 300;
   } else if (category === "College") {
-    fee = 450;
+    due = 450;
   } else {
-    fee = 600;
+    due = 600;
   }
 
   console.log(name);
@@ -48,7 +63,8 @@ const postRegister = (req, res) => {
         email,
         institute,
         payment_status,
-        fee,
+        paid,
+        due,
         selected,
         t_shirt: tshirt,
       });
@@ -70,8 +86,26 @@ const postRegister = (req, res) => {
   });
 };
 
+const deleteParticipant = (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  Participant.deleteOne({ _id: id })
+    .then(() => {
+      let error = "Data deleted successfully";
+      req.flash("error", error);
+      res.redirect("/mo/participant-list");
+    })
+    .catch((err) => {
+      let error = "Failed to delete data";
+      req.flash("error", error);
+      res.redirect("/mo/participant-list");
+    });
+
+};
+
 module.exports = {
   getRegister,
   postRegister,
   getParticipantList,
+  deleteParticipant,
 };
