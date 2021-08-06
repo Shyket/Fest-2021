@@ -13,9 +13,11 @@
       </div>
       <div class="x_content">
         <br />
-        <% let success3= 'Participant has been selected succesfully'%> <% let
-        success= 'Data has been deleted successfully!'%> <% let success2=
-        'Payment completed succesfully'%> <% if (error.length>0) {if
+        <% let success3= 'Team Selected'%>
+        <% let success= 'Delete Successful'%>
+        <% let success2='Payment successfull'%>
+        <% let success4='Team Data Updated Succesfully'%>
+        <% if (error.length>0) {if
         (error==success||success2||success3){%>
         <div class="alert alert-success"><%=error%></div>
         <%}else{%>
@@ -32,8 +34,7 @@
               >
                 <thead>
                   <tr>
-                    <!-- <th>ID</th> -->
-                    <th>Team Name</th>
+                    <th>Team <br/>Name</th>
                     <th>Institute</th>
                     <th>Coach <br />Information</th>
                     <th>Team Leader <br />Information</th>
@@ -56,28 +57,28 @@
                     <td><%=team.teamName%></td>
                     <td><%=team.institute%></td>
                     <td>
-                      <h7 style="color: rgb(76, 76, 240)">Name:&nbsp;</h7> <%=team.coachName%><br />
-                      <h7 style="color: rgb(76, 76, 240)">Contact No:&nbsp;</h7> <%=team.coachContact%><br />
-                      <h7 style="color: rgb(76, 76, 240)">Email:&nbsp;</h7> <%=team.coachEmail%> <br />
-                      <h7 style="color: rgb(76, 76, 240)">Tshrit Size:&nbsp;</h7> <%=team.coachTshirt%><br />
+                      <h7 style="color: blue">Name:&nbsp;</h7> <%=team.coachName%><br />
+                      <h7 style="color: blue">Contact:&nbsp;</h7> <%=team.coachContact%><br />
+                      <h7 style="color: blue">Email:&nbsp;</h7> <%=team.coachEmail%> <br />
+                      <h7 style="color: blue">Tshrit Size:&nbsp;</h7> <%=team.coachTshirt%><br />
                     </td>
                     <td>
-                      <h7 style="color: rgb(76, 76, 240)">Name:&nbsp;</h7><%=team.leaderName%><br />
-                      <h7 style="color: rgb(76, 76, 240)">Contact No:&nbsp;</h7> <%=team.leaderContact%> <br />
-                      <h7 style="color: rgb(76, 76, 240)">Email:&nbsp;</h7> <%=team.leaderEmail%> <br />
-                      <h7 style="color: rgb(76, 76, 240)">Tshrit Size:&nbsp;</h7> <%=team.leaderTshirt%> <br />
+                      <h7 style="color: blue">Name:&nbsp;</h7><%=team.leaderName%><br />
+                      <h7 style="color: blue">Contact:&nbsp;</h7> <%=team.leaderContact%> <br />
+                      <h7 style="color: blue">Email:&nbsp;</h7> <%=team.leaderEmail%> <br />
+                      <h7 style="color: blue">Tshrit Size:&nbsp;</h7> <%=team.leaderTshirt%> <br />
                     </td>
                     <td>
-                      <h7 style="color: rgb(76, 76, 240)">Name:&nbsp;</h7> <%=team.member1Name%><br />
-                      <h7 style="color: rgb(76, 76, 240)">Contact No:&nbsp;</h7> <%=team.member1Contact%> <br />
-                      <h7 style="color: rgb(76, 76, 240)">Email:&nbsp;</h7> <%=team.member1Email%> <br />
-                      <h7 style="color: rgb(76, 76, 240)">Tshrit Size:&nbsp;</h7> <%=team.member1Tshirt%> <br />
+                      <h7 style="color: blue">Name:&nbsp;</h7> <%=team.member1Name%><br />
+                      <h7 style="color: blue">Contact:&nbsp;</h7> <%=team.member1Contact%> <br />
+                      <h7 style="color: blue">Email:&nbsp;</h7> <%=team.member1Email%> <br />
+                      <h7 style="color: blue">Tshrit Size:&nbsp;</h7> <%=team.member1Tshirt%> <br />
                     </td>
                     <td>
-                      <h7 style="color: rgb(76, 76, 240)">Name:&nbsp;</h7> <%=team.member2Name%><br />
-                      <h7 style="color: rgb(76, 76, 240)">Contact No:&nbsp;</h7> <%=team.member2Contact%> <br />
-                      <h7 style="color: rgb(76, 76, 240)">Email:&nbsp;</h7> <%=team.member2Email%> <br />
-                      <h7 style="color: rgb(76, 76, 240)">Tshrit Size:&nbsp;</h7> <%=team.member2Tshirt%> <br />
+                      <h7 style="color: blue">Name:&nbsp;</h7> <%=team.member2Name%><br />
+                      <h7 style="color: blue">Contact:&nbsp;</h7> <%=team.member2Contact%> <br />
+                      <h7 style="color: blue">Email:&nbsp;</h7> <%=team.member2Email%> <br />
+                      <h7 style="color: blue">Tshrit Size:&nbsp;</h7> <%=team.member2Tshirt%> <br />
                     </td>
                     <td><%=team.due%></td>
                     <td><%=team.paid%></td>
@@ -89,7 +90,7 @@
                       <%}%>
                     </td>
                     <td>
-                      <%if(team.paid==team.due){%>
+                      <%if(team.due==0){%>
                       <p style="color: green">Done</p>
                       <%}else{%>
                       <p style="color: red">Incomplete</p>
@@ -103,7 +104,7 @@
                       ></a>
                     </td>
                     <td>
-                      <% const paymentDoneURL= '/pc/payment'+ team._id
+                      <% const paymentDoneURL= '/pc/payment/'+ team._id
                       %>
                       <a href="<%= paymentDoneURL %>"
                         ><i class="fa fa-money"></i

@@ -99,13 +99,15 @@ const getTeamList = (req, res) => {
       });
     });
 };
+
+
 const deleteTeam = (req, res) => {
   const id = req.params.id;
 
   let error = "";
   Team.deleteOne({ _id: id })
     .then(() => {
-      error = "Delete Successfull";
+      error = "Delete Successful";
       req.flash("error", error);
       res.redirect("/pc/team-list");
     })
@@ -120,15 +122,15 @@ const paymentDone = (req, res) => {
   const id = req.params.id;
 
   Team.findOne({ _id: id })
-    .then((participant) => {
-      participant.paid = participant.due;
-      participant.due=0;
-      participant
+    .then((team) => {
+      team.paid = team.due;
+      team.due = 0;
+      team
         .save()
         .then(() => {
-          let error = "Payment completed succesfully";
+          let error = "Payment successfull";
           req.flash("error", error);
-          res.redirect("/ProgContest/list");
+          res.redirect("/pc/team-list");
         })
         .catch(() => {
           let error = "Error occured";
@@ -146,7 +148,7 @@ const paymentDone = (req, res) => {
 const getEditTeam = (req, res) => {
   const id = req.params.id;
   let team = [];
-  ProgContest.findOne({ _id: id })
+  Team.findOne({ _id: id })
     .then((data) => {
       team = data;
 
@@ -158,7 +160,7 @@ const getEditTeam = (req, res) => {
     .catch((e) => {
       console.log(e);
       error = "Error Occured";
-      res.render("prog-contest/editTeam.ejs", {
+      res.render("programming-contest/editTeam.ejs", {
         error: req.flash("error", error),
         team: info,
       });
@@ -188,7 +190,7 @@ const postEditTeam = async (req, res) => {
   } = req.body;
 
 
-  const data = await Team.findOneAndUpdate(
+  Team.findOneAndUpdate(
     { teamName: teamName, institute: institute },
     {
       coachName,
@@ -208,22 +210,27 @@ const postEditTeam = async (req, res) => {
       member2Email,
       member2tshirt,
     }
-  );
-  if (data) {
-    res.redirect("/pc/team-list");
-  }
+  ).then(data=> {
+      let error = "Team Data Updated Succesfully";
+      req.flash("error", error);
+      res.redirect("/pc/team-list");
+  }).catch(err => {
+      let error = "Unexpected error occured";
+      req.flash("error", error);
+      res.redirect("/pc/team-list");
+  })
 };
 
 const selectTeam = (req, res) => {
   const id = req.params.id;
 
   Team.findOne({ _id: id })
-    .then((participant) => {
-      participant.selected = true;
-      participant
+    .then((team) => {
+      team.selected = true;
+      team
         .save()
         .then(() => {
-          let error = "Participant has been selected succesfully";
+          let error = "Team Selected";
           req.flash("error", error);
           res.redirect("/pc/team-list");
         })
