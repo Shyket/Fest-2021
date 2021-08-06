@@ -14,6 +14,7 @@ mongoose
   .connect(process.env.MongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: true
   })
   .then(() => {
     console.log("Connected to Database!");
@@ -45,9 +46,13 @@ app.use(express.urlencoded({ extended: false }));
 const indexRoutes = require("./routes/index.routes");
 const userRoutes = require("./routes/users.routes");
 const olympiadRoutes = require("./routes/olympiad.routes");
+const programmingContestRoutes = require("./routes/programmingContest.routes");
+
 app.use(indexRoutes);
 app.use("/users", userRoutes);
 app.use("/mo", olympiadRoutes);
+app.use("/pc", programmingContestRoutes);
+
 
 
 module.exports = app;

@@ -1,6 +1,4 @@
 const Participant = require("../models/Participant.model");
-const bcrypt = require("bcryptjs");
-const passport = require("passport");
 
 const getRegister = (req, res) => {
   res.render("math-olympiad/register.ejs", { message: req.flash("message") });
@@ -39,13 +37,6 @@ const postRegister = (req, res) => {
   } else {
     due = 600;
   }
-
-  console.log(name);
-  console.log(category);
-  console.log(institute);
-  console.log(contact);
-  console.log(email);
-  console.log(tshirt);
 
   let message = "";
 
@@ -100,7 +91,99 @@ const deleteParticipant = (req, res) => {
       req.flash("error", error);
       res.redirect("/mo/participant-list");
     });
+};
 
+const paymentDone = (req, res) => {
+  const id = req.params.id;
+
+  Participant.findOne({ _id: id })
+    .then((participant) => {
+      participant.paid = participant.due;
+      participant.due = 0;
+      participant.payment_status = true;
+      participant
+        .save()
+        .then(() => {
+          let error = "Payment completed succesfully";
+          req.flash("error", error);
+          res.redirect("/mo/participant-list");
+        })
+        .catch(() => {
+          let error = "Transaction Failed";
+          req.flash("error", error);
+          res.redirect("/mo/participant-list");
+        });
+    })
+    .catch(() => {
+      let error = "Invalid Participant ID";
+      req.flash("error", error);
+      res.redirect("/mo/participant-list");
+    });
+};
+
+const selectParticipant = (req, res) => {
+  const id = req.params.id;
+
+  Participant.findOne({ _id: id })
+    .then((participant) => {
+      participant.selected = true;
+      participant
+        .save()
+        .then(() => {
+          let error = "Participant selected succesfully";
+          req.flash("error", error);
+          res.redirect("/mo/participant-list");
+        })
+        .catch(() => {
+          let error = "Unexpected error occured";
+          req.flash("error", error);
+          res.redirect("/mo/participant-list");
+        });
+    })
+    .catch(() => {
+      let error = "Invalid participant ID";
+      req.flash("error", error);
+      res.redirect("/mo/participant-list");
+    });
+};
+
+const getEditParticipant = (req, res) => {
+  const id = req.params.id;
+  let participant = [];
+  let message = "";
+  Participant.findOne({ _id: id })
+    .then((data) => {
+      participant = data;
+      res.render("math-olympiad/edit-participant.ejs", {
+        message: req.flash("message"),
+        participant: participant,
+      });
+    })
+    .catch((err) => {
+      message = "Unexpected error occured";
+      res.render("math-olympiad/edit-participant.ejs", {
+        message: req.flash("message", message),
+      });
+    });
+};
+
+const postEditParticipant = async (req, res) => {
+  const { name, contact, institute, category, email, tshirt } = req.body;
+
+  Participant.findOneAndUpdate(
+    { name: name, contact: contact },
+    { category, email, institute, tshirt }
+  )
+    .then((data) => {
+      let error = "Participant Data Updated Succesfully";
+      req.flash("error", error);
+      res.redirect("/mo/participant-list");
+    })
+    .catch((err) => {
+      let error = "Unexpected error occured";
+      req.flash("error", error);
+      res.redirect("/mo/participant-list");
+    });
 };
 
 module.exports = {
@@ -108,4 +191,8 @@ module.exports = {
   postRegister,
   getParticipantList,
   deleteParticipant,
+  paymentDone,
+  selectParticipant,
+  getEditParticipant,
+  postEditParticipant,
 };
