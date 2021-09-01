@@ -14,7 +14,7 @@ mongoose
   .connect(process.env.MongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: true
+    useFindAndModify: false
   })
   .then(() => {
     console.log("Connected to Database!");
