@@ -1,4 +1,6 @@
 const Participant = require("../models/Participant.model");
+const generateCode = require("../utils/code");
+const {sendMail} = require("../utils/mail");
 
 const getRegister = (req, res) => {
   res.render("math-olympiad/register.ejs", { message: req.flash("message") });
@@ -39,7 +41,7 @@ const postRegister = (req, res) => {
   }
 
   let message = "";
-
+  let code = generateCode();
   Participant.findOne({ name: name, contact: contact }).then((participant) => {
     if (participant) {
       message = "participant already registered!";
@@ -47,8 +49,10 @@ const postRegister = (req, res) => {
       req.flash("message", message);
       res.redirect("/mo/register");
     } else {
+
       const participant = new Participant({
         name,
+        code,
         category,
         contact,
         email,
@@ -62,14 +66,20 @@ const postRegister = (req, res) => {
       participant
         .save()
         .then(() => {
-          message = "participant registered successfully";
-          console.log(message);
-          req.flash("message", message);
-          res.redirect("/mo/register");
+          sendMail(name, email, code)
+            .then(() => {
+              message = "participant registered successfully";
+              req.flash("message", message);
+              res.redirect("/mo/register");
+            })
+            .catch(() => {
+              message = "Sending Email Failed";
+              req.flash("message", message);
+              res.redirect("/mo/register");
+            });
         })
         .catch(() => {
           message = "upexpected error occured! participant registration failed";
-          console.log(message);
           req.flash("message", message);
           res.redirect("/mo/register");
         });
@@ -185,6 +195,7 @@ const postEditParticipant = async (req, res) => {
       res.redirect("/mo/participant-list");
     });
 };
+
 
 module.exports = {
   getRegister,

@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
+const crypto = require("crypto");
+
 const ParticipantSchema = new mongoose.Schema({
+  code: {
+    type: String,
+  },
   name: {
     type: String,
     required: true,
@@ -39,6 +44,8 @@ const ParticipantSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+
 
 const Participant = mongoose.model("Participant", ParticipantSchema);
 module.exports = Participant;

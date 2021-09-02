@@ -1,4 +1,6 @@
 const Team = require("../models/Team.model");
+const generateCode = require("../utils/code");
+const { sendMail } = require("../utils/mail");
 
 const getRegister = (req, res) => {
   res.render("programming-contest/register.ejs", { error: req.flash("error") });
@@ -29,55 +31,63 @@ const postRegister = (req, res) => {
   const due = 800;
   const paid = 0;
   const selected = false;
+  let code = generateCode();
   let error = "";
 
-  Team.findOne({ teamName: teamName, institute: institute }).then(
-    (team) => {
-      if (team) {
-        error = "Team with same name and institution exists";
-        req.flash("error", error);
-        res.redirect("/pc/register");
-      } else {
-        const team = new Team({
-          teamName,
-          institute,
-          coachName,
-          coachContact,
-          coachEmail,
-          coachTshirt,
-          leaderName,
-          leaderContact,
-          leaderEmail,
-          leaderTshirt,
-          member1Name,
-          member1Contact,
-          member1Email,
-          member1Tshirt,
-          member2Name,
-          member2Contact,
-          member2Email,
-          member2Tshirt,
-          due,
-          paid,
-          selected,
+
+  Team.findOne({ teamName: teamName, institute: institute }).then((team) => {
+    if (team) {
+      error = "Team with same name and institution exists";
+      req.flash("error", error);
+      res.redirect("/pc/register");
+    } else {
+      const team = new Team({
+        code,
+        teamName,
+        institute,
+        coachName,
+        coachContact,
+        coachEmail,
+        coachTshirt,
+        leaderName,
+        leaderContact,
+        leaderEmail,
+        leaderTshirt,
+        member1Name,
+        member1Contact,
+        member1Email,
+        member1Tshirt,
+        member2Name,
+        member2Contact,
+        member2Email,
+        member2Tshirt,
+        due,
+        paid,
+        selected,
+      });
+      team
+        .save()
+        .then(() => {
+          sendMail(teamName, leaderEmail, code)
+            .then(() => {
+              error = "Team registered successfully";
+              req.flash("error", error);
+              res.redirect("/pc/register");
+            })
+            .catch(() => {
+              error = "Sending Email Failed";
+              req.flash("error", error);
+              res.redirect("/pc/register");
+            });
+        })
+        .catch((err) => {
+          error = "Unexpected error";
+          console.log("error ", err);
+          req.flash("error", error);
+          res.redirect("/pc/register");
         });
-        team
-          .save()
-          .then(() => {
-            error =
-              "Team registered successfully";
-            req.flash("error", error);
-            res.redirect("/pc/register");
-          })
-          .catch((err) => {
-            error = "Unexpected error";
-            console.log("error ", err);
-            req.flash("error", error);
-            res.redirect("/pc/register");
-          });
-      }
     }
-  );
+  });
 };
 
 const getTeamList = (req, res) => {
@@ -99,7 +109,6 @@ const getTeamList = (req, res) => {
       });
     });
 };
-
 
 const deleteTeam = (req, res) => {
   const id = req.params.id;
@@ -189,7 +198,6 @@ const postEditTeam = async (req, res) => {
     member2tshirt,
   } = req.body;
 
-
   Team.findOneAndUpdate(
     { teamName: teamName, institute: institute },
     {
@@ -210,15 +218,17 @@ const postEditTeam = async (req, res) => {
       member2Email,
       member2tshirt,
     }
-  ).then(data=> {
+  )
+    .then((data) => {
       let error = "Team Data Updated Succesfully";
       req.flash("error", error);
       res.redirect("/pc/team-list");
-  }).catch(err => {
+    })
+    .catch((err) => {
       let error = "Unexpected error occured";
       req.flash("error", error);
       res.redirect("/pc/team-list");
-  })
+    });
 };
 
 const selectTeam = (req, res) => {

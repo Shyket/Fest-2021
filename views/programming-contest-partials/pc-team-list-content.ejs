@@ -35,6 +35,7 @@
                 <thead>
                   <tr>
                     <th>Team <br/>Name</th>
+                    <th>Team <br/>Code</th>
                     <th>Institute</th>
                     <th>Coach <br />Information</th>
                     <th>Team Leader <br />Information</th>
@@ -55,6 +56,7 @@
                   teamList.forEach(team=>{%>
                   <tr>
                     <td><%=team.teamName%></td>
+                    <td><%=team.code%></td>
                     <td><%=team.institute%></td>
                     <td>
                       <h7 style="color: blue">Name:&nbsp;</h7> <%=team.coachName%><br />
